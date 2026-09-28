@@ -1,6 +1,6 @@
 # Shop Next
 
-A simple full-stack shop application built with Next.js and Express.js, featuring authentication, protected routes, cookie-based sessions, and a responsive UI.
+**A simple full-stack shop application built with Next.js and Express.js, featuring authentication, protected routes, cookie-based sessions, and a responsive UI.**
 
 # Features
 ## User login authentication
