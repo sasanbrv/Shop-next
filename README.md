@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Shop Next
+A simple full-stack shop application built with Next.js and Express.js, featuring authentication, protected routes, cookie-based sessions, and a responsive UI.
 
-## Getting Started
+Features
+User login authentication
+HTTP-only cookie-based session
+Protected dashboard route
+Logout functionality
+Authentication state checking
+Client-side navigation with Next.js
+Responsive UI with Tailwind CSS
+API communication with Axios
+Separate frontend and backend
+Tech Stack
 
-First, run the development server:
+Frontend:
+Next.js 16.3.4
+React 19
+TypeScript
+Tailwind CSS 4
+Axios
 
-```bash
+
+Backend:
+Node.js
+Express.js
+Cookie Parser
+CORS
+
+Getting Started
+1. Clone the repository:
+git clone https://github.com/sasanbrv/Shop-next.git
+
+cd Shop-next
+2. Install dependencies:
+npm install
+3. Start the Next.js frontend:
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The frontend will run on:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+http://localhost:3000
+4. Start the backend:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Go to the backend directory:
 
-## Learn More
+cd backend
 
-To learn more about Next.js, take a look at the following resources:
+Install backend dependencies if needed:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Then start the Express server.
 
-## Deploy on Vercel
+The backend runs on:
+http://localhost:5000
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+ Demo Login:
+For local development, the project currently uses a simple demo account:
+Username: admin
+Password: 1234
