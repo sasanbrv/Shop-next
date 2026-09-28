@@ -1,18 +1,18 @@
-#Shop Next
+# Shop Next
 
 A simple full-stack shop application built with Next.js and Express.js, featuring authentication, protected routes, cookie-based sessions, and a responsive UI.
 
-#Features
-##User login authentication
-##HTTP-only cookie-based session
-##Protected dashboard route
-##Logout functionality
-##Authentication state checking
-##Client-side navigation with Next.js
-##Responsive UI with Tailwind CSS
-##API communication with Axios
-##Separate frontend and backend
-##Tech Stack
+# Features
+## User login authentication
+## HTTP-only cookie-based session
+## Protected dashboard route
+## Logout functionality
+## Authentication state checking
+## Client-side navigation with Next.js
+## Responsive UI with Tailwind CSS
+## API communication with Axios
+## Separate frontend and backend
+## Tech Stack
 
 Frontend:
 Next.js 16.3.4
