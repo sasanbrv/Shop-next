@@ -97,26 +97,7 @@ async function Product({ params }: IProductProps) {
               </div>
 
               {/* Add To Cart */}
-              <button
-                className="mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-500/25 active:translate-y-0"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="h-5 w-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M2.25 3h1.386c.51 0 .955.343 1.087.836l.383 1.437m0 0L6.75 15.75h10.5l2.25-8.25H5.106ZM6.75 15.75l-.75 2.25h12.75"
-                  />
-                </svg>
-
-                Add to Cart
-              </button>
+              
 
               {/* Features */}
               <div className="mt-6 grid grid-cols-3 gap-2 border-t border-slate-100 pt-5">

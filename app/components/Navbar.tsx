@@ -3,9 +3,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useShoppingCartContext } from "../context/ShoppingCartContext";
 
 const Navbar = () => {
   const pathname = usePathname();
+
+  const {cartTotalQty} = useShoppingCartContext()
 
   const navLinks = [
     {
@@ -17,6 +20,16 @@ const Navbar = () => {
       id: 2,
       href: "/store",
       title: "Store",
+    },
+    {
+      id: 3,
+      href: "/dashboard",
+      title: "Dashboard",
+    },
+    {
+      id: 4,
+      href: "/login",
+      title: "Login",
     },
   ];
 
@@ -88,7 +101,7 @@ const Navbar = () => {
           </svg>
 
           <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-600 px-1 text-[10px] font-bold text-white shadow-sm">
-            0
+            {cartTotalQty}
           </span>
         </Link>
       </div>
