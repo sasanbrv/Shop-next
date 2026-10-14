@@ -4,7 +4,7 @@ import ProductItem from "../components/ProductItem";
 import { IProductItemProps } from "../components/ProductItem";
 
 async function Store() {
-  const result = await fetch("http://localhost:3000/api/products", {
+  const result = await fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"}/api/products`, {
     cache: "no-store",
   });
 
