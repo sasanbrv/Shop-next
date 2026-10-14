@@ -4,15 +4,32 @@ import ProductItem from "../components/ProductItem";
 import { IProductItemProps } from "../components/ProductItem";
 import { prisma } from "@/lib/prisma";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 async function Store() {
- const data = (await prisma.product.findMany({
-   orderBy: { createdAt: "desc" },
- })) as IProductItemProps[];
+  const products = await prisma.product.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  const data: IProductItemProps[] = products.map((product) => ({
+    id: product.id,
+    title: product.title,
+    price: product.price,
+    description: product.description,
+    category: product.category,
+    image: product.image,
+    rating: {
+      rate: product.ratingRate ?? 0,
+      count: product.ratingCount,
+    },
+  }));
 
   return (
     <main className="min-h-screen bg-slate-100 px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        {/* Header */}
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <span className="mb-2 inline-block text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
@@ -34,7 +51,6 @@ async function Store() {
           </div>
         </div>
 
-        {/* Products */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {data.map((item) => (
             <Link
