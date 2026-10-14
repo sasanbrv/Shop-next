@@ -1,36 +1,43 @@
 
 import AddToCart from "@/app/components/AddToCart";
 import { IProductItemProps } from "@/app/components/ProductItem";
+import { notFound } from "next/navigation";
 
 interface IProductProps {
   params: Promise<{ id: string }>;
-  searchParams: Promise<object>;
 }
 
 async function Product({ params }: IProductProps) {
   const { id } = await params;
 
-  const result = await fetch(`http://localhost:3004/products/${id}`);
+  const result = await fetch(
+    `http://localhost:3000/api/products/${encodeURIComponent(id)}`,
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (result.status === 404) {
+    notFound();
+  }
+
+  if (!result.ok) {
+    throw new Error("Failed to fetch product");
+  }
+
   const data = (await result.json()) as IProductItemProps;
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
-
-        {/* Product Card */}
         <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-xl shadow-slate-200/50">
-
           <div className="grid grid-cols-1 lg:grid-cols-2">
-
             {/* Product Image */}
             <div className="relative flex h-[360px] items-center justify-center overflow-hidden bg-slate-50 p-6 sm:h-[420px] lg:h-[480px]">
-
-              {/* Featured Badge */}
               <div className="absolute left-5 top-5 z-10 rounded-full bg-blue-600 px-3 py-1.5 text-xs font-bold text-white shadow-lg shadow-blue-500/20">
                 Featured
               </div>
 
-              {/* Image */}
               <img
                 src={data.image}
                 alt={data.title}
@@ -40,13 +47,10 @@ async function Product({ params }: IProductProps) {
 
             {/* Product Info */}
             <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
-
-              {/* Brand */}
               <span className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-blue-600">
                 Sasy Shop
               </span>
 
-              {/* Title */}
               <h1 className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
                 {data.title}
               </h1>
@@ -58,8 +62,14 @@ async function Product({ params }: IProductProps) {
                 </div>
 
                 <span className="text-xs font-medium text-slate-400">
-                  4.8 / 5
+                  {data.rating?.rate ?? data.ratingRate ?? "—"} / 5
                 </span>
+
+                {(data.rating?.count ?? data.ratingCount) !== undefined && (
+                  <span className="text-xs text-slate-400">
+                    ({data.rating?.count ?? data.ratingCount} reviews)
+                  </span>
+                )}
               </div>
 
               {/* Description */}
@@ -67,7 +77,6 @@ async function Product({ params }: IProductProps) {
                 {data.description}
               </p>
 
-              {/* Divider */}
               <div className="my-5 h-px bg-slate-100" />
 
               {/* Price */}
@@ -93,15 +102,11 @@ async function Product({ params }: IProductProps) {
                   Quantity
                 </span>
 
-                <AddToCart id={id}/>
+                <AddToCart id={id} />
               </div>
-
-              {/* Add To Cart */}
-              
 
               {/* Features */}
               <div className="mt-6 grid grid-cols-3 gap-2 border-t border-slate-100 pt-5">
-
                 <div className="text-center">
                   <div className="text-lg">🚚</div>
                   <p className="mt-1 text-[10px] font-medium text-slate-500">
@@ -122,9 +127,7 @@ async function Product({ params }: IProductProps) {
                     Easy Returns
                   </p>
                 </div>
-
               </div>
-
             </div>
           </div>
         </div>

@@ -1,84 +1,174 @@
-"use client"
-import { createContext, useContext, useState } from "react";
+"use client";
 
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useSyncExternalStore,
+} from "react";
 
-type ShoppingCartContextProviderProps={
-    children : React.ReactNode
-}
+type ShoppingCartContextProviderProps = {
+  children: React.ReactNode;
+};
 
-type CartItems = {
-    id: number , 
-    qty: number ,
-}
+type CartItem = {
+  id: string;
+  qty: number;
+};
 
 type TShoppingCartItems = {
-    cartItems : CartItems[] ,
-    handleIncreaseProductQty : (id: number) => void ,
-    handleDecreaseProductQty : (id: number) => void ,
-    cartTotalQty: number
+  cartItems: CartItem[];
+  handleIncreaseProductQty: (id: string) => void;
+  handleDecreaseProductQty: (id: string) => void;
+  cartTotalQty: number;
+  isInitialized: boolean;
+};
+
+const STORAGE_KEY = "shopping-cart";
+
+const ShoppingCartContext = createContext<TShoppingCartItems | undefined>(
+  undefined
+);
+
+let cachedCart: CartItem[] = [];
+let initialized = false;
+
+const listeners = new Set<() => void>();
+
+function isValidCartItem(item: unknown): item is CartItem {
+  if (typeof item !== "object" || item === null) return false;
+  if (!("id" in item) || !("qty" in item)) return false;
+
+  return (
+    typeof item.id === "string" &&
+    item.id.length > 0 &&
+    typeof item.qty === "number" &&
+    Number.isInteger(item.qty) &&
+    item.qty > 0
+  );
 }
-const ShoppingCartContext = createContext({} as TShoppingCartItems)
 
-
-export const useShoppingCartContext = () => {
-    return useContext(ShoppingCartContext)
+function notifyListeners() {
+  listeners.forEach((listener) => listener());
 }
 
-export function ShoppingCartContextProvider({children} : ShoppingCartContextProviderProps ){
-    const [cartItems,setCartItems] = useState<CartItems[]>([])
+function initializeCart() {
+  if (initialized || typeof window === "undefined") return;
 
-    const cartTotalQty = cartItems.reduce((totalQty , item)=>{
-        return totalQty + item.qty
-    } , 0)
+  initialized = true;
 
-    const handleIncreaseProductQty = (id: number ) =>{ 
-        setCartItems(currentItems => {
-            const isNotProductExist = currentItems.find(item => item.id == id) == null
+  try {
+    const savedCart = localStorage.getItem(STORAGE_KEY);
 
-            if(isNotProductExist){
-                return [...currentItems , {id : id , qty : 1}]
-            }
-            else { 
-                return currentItems.map(item => {
-                    if(item.id == id){
-                        return {
-                            ...item,
-                            qty: item.qty + 1 
-                        }
-                    } 
-                    else{
-                        return item
-                    }
-                })
-            }
-        })
+    if (savedCart) {
+      const parsed: unknown = JSON.parse(savedCart);
+      cachedCart = Array.isArray(parsed)
+        ? parsed.filter(isValidCartItem)
+        : [];
     }
+  } catch (error) {
+    console.error("Failed to load shopping cart:", error);
+    cachedCart = [];
+  }
+}
 
-    const handleDecreaseProductQty = (id: number) => {
-        setCartItems(currentItem => {
-            const isLastOne = currentItem.find(item => item.id == id)?.qty == 1 
+function getSnapshot() {
+  return cachedCart;
+}
 
-            if(isLastOne){
-                return currentItem.filter(item => item.id != id)
-            }else { 
-                return currentItem.map(item => {
-                    if(item.id == id){
-                        return {
-                            ...item,
-                            qty: item.qty - 1 
-                        }
-                    } 
-                    else{
-                        return item
-                    }
-                })
-            }
-        })
-    }
+const EMPTY_CART: CartItem[] = [];
 
-    return(
-        <ShoppingCartContext.Provider value={{cartItems , handleIncreaseProductQty , cartTotalQty , handleDecreaseProductQty}} >
-            {children}
-        </ShoppingCartContext.Provider>
-    )
+function getServerSnapshot() {
+  return EMPTY_CART;
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+
+  if (!initialized && typeof window !== "undefined") {
+    initializeCart();
+    notifyListeners();
+  }
+
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+function updateCart(updater: (items: CartItem[]) => CartItem[]) {
+  initializeCart();
+  cachedCart = updater(cachedCart);
+
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cachedCart));
+  } catch (error) {
+    console.error("Failed to save shopping cart:", error);
+  }
+
+  notifyListeners();
+}
+
+export function useShoppingCartContext() {
+  const context = useContext(ShoppingCartContext);
+
+  if (!context) {
+    throw new Error(
+      "useShoppingCartContext must be used within ShoppingCartContextProvider"
+    );
+  }
+
+  return context;
+}
+
+export function ShoppingCartContextProvider({
+  children,
+}: ShoppingCartContextProviderProps) {
+  const cartItems = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot
+  );
+
+  const handleIncreaseProductQty = useCallback((id: string) => {
+    updateCart((items) => {
+      const existing = items.find((item) => item.id === id);
+
+      if (existing) {
+        return items.map((item) =>
+          item.id === id ? { ...item, qty: item.qty + 1 } : item
+        );
+      }
+
+      return [...items, { id, qty: 1 }];
+    });
+  }, []);
+
+  const handleDecreaseProductQty = useCallback((id: string) => {
+    updateCart((items) =>
+      items
+        .map((item) =>
+          item.id === id ? { ...item, qty: item.qty - 1 } : item
+        )
+        .filter((item) => item.qty > 0)
+    );
+  }, []);
+
+  const cartTotalQty = cartItems.reduce(
+    (total, item) => total + item.qty,
+    0
+  );
+
+  return (
+    <ShoppingCartContext.Provider
+      value={{
+        cartItems,
+        handleIncreaseProductQty,
+        handleDecreaseProductQty,
+        cartTotalQty,
+        isInitialized: initialized,
+      }}
+    >
+      {children}
+    </ShoppingCartContext.Provider>
+  );
 }

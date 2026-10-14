@@ -6,25 +6,63 @@ import { useEffect, useState } from "react";
 import { IProductItemProps } from "./ProductItem";
 
 interface ICartItem {
-  id: number;
+  id: string | number;
   qty: number;
 }
 
 function CartItem({ id, qty }: ICartItem) {
-  const [data, setData] = useState({} as IProductItemProps);
+  const [data, setData] = useState<IProductItemProps | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    axios(`http://localhost:3004/products/${id}`).then((result) => {
-      const { data } = result;
+    let cancelled = false;
 
-      setData(data);
-    });
+    async function fetchProduct() {
+      try {
+        setError(false);
+
+        const result = await axios.get<IProductItemProps>(
+          `/api/products/${encodeURIComponent(String(id))}`
+        );
+
+        if (!cancelled) {
+          setData(result.data);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          console.error("Failed to fetch cart product:", err);
+          setError(true);
+        }
+      }
+    }
+
+    fetchProduct();
+
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
+
+  if (error) {
+    return (
+      <div className="m-2 rounded-2xl border border-red-200 bg-white p-5 text-sm text-red-600">
+        Failed to load this product. Please try again.
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="m-2 animate-pulse rounded-2xl border border-slate-200 bg-white p-5">
+        <div className="h-4 w-2/3 rounded bg-slate-200" />
+        <div className="mt-4 h-4 w-1/3 rounded bg-slate-200" />
+      </div>
+    );
+  }
 
   return (
     <div className="group m-2 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-200/60">
       <div className="grid grid-cols-12 items-center">
-
         {/* Product Info */}
         <div className="col-span-8 p-5 sm:col-span-9">
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600">
@@ -49,9 +87,7 @@ function CartItem({ id, qty }: ICartItem) {
 
             {/* Price */}
             <div>
-              <span className="text-xs text-slate-400">
-                Price
-              </span>
+              <span className="text-xs text-slate-400">Price</span>
 
               <p className="text-lg font-black text-slate-900">
                 ${data.price}
@@ -61,12 +97,10 @@ function CartItem({ id, qty }: ICartItem) {
 
           {/* Total */}
           <div className="mt-3">
-            <span className="text-xs text-slate-400">
-              Total
-            </span>
+            <span className="text-xs text-slate-400">Total</span>
 
             <span className="ml-2 text-sm font-bold text-blue-600">
-              ${data.price * qty}
+              ${(data.price * qty).toFixed(2)}
             </span>
           </div>
         </div>

@@ -1,11 +1,16 @@
 
-
 export interface IProductItemProps {
-  id: number;
+  id: string;
   image: string;
   title: string;
   description: string;
   price: number;
+  rating?: {
+    rate: number | null;
+    count: number;
+  };
+  ratingRate?: number | null;
+  ratingCount?: number;
 }
 
 function ProductItem({
@@ -16,7 +21,6 @@ function ProductItem({
 }: IProductItemProps) {
   return (
     <div className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-blue-100 hover:shadow-2xl hover:shadow-blue-500/10">
-      
       {/* Product Image */}
       <div className="relative flex h-64 items-center justify-center overflow-hidden bg-slate-50 p-6">
         <img
@@ -32,6 +36,7 @@ function ProductItem({
 
         {/* Favorite */}
         <button
+          type="button"
           className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-slate-500 shadow-md backdrop-blur transition-all duration-300 hover:scale-110 hover:text-red-500"
           aria-label="Add to favorites"
         >
@@ -77,6 +82,7 @@ function ProductItem({
           </div>
 
           <button
+            type="button"
             className="flex h-11 items-center gap-2 rounded-xl bg-slate-900 px-4 text-sm font-bold text-white transition-all duration-300 hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-500/20 active:scale-95"
           >
             <svg

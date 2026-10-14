@@ -1,16 +1,22 @@
 
 import Link from "next/link";
 import ProductItem from "../components/ProductItem";
-import { IProductItemProps } from "./../components/ProductItem";
+import { IProductItemProps } from "../components/ProductItem";
 
 async function Store() {
-  const result = await fetch("http://localhost:3004/products");
+  const result = await fetch("http://localhost:3000/api/products", {
+    cache: "no-store",
+  });
+
+  if (!result.ok) {
+    throw new Error("Failed to fetch products");
+  }
+
   const data = (await result.json()) as IProductItemProps[];
 
   return (
     <main className="min-h-screen bg-slate-100 px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-
         {/* Header */}
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -23,8 +29,8 @@ async function Store() {
             </h1>
 
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
-              Discover our collection of high-quality products carefully selected
-              for your everyday needs.
+              Discover our collection of high-quality products carefully
+              selected for your everyday needs.
             </p>
           </div>
 
@@ -45,7 +51,6 @@ async function Store() {
             </Link>
           ))}
         </div>
-
       </div>
     </main>
   );
