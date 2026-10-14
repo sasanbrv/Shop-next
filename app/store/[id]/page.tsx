@@ -10,7 +10,9 @@ interface IProductProps {
 async function Product({ params }: IProductProps) {
   const { id } = await params;
 
-  const result = await fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"}/api/products`, {
+  const result = await fetch(
+    `http://localhost:3000/api/products/${encodeURIComponent(id)}`,
+    {
       cache: "no-store",
     }
   );

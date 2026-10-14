@@ -2,17 +2,12 @@
 import Link from "next/link";
 import ProductItem from "../components/ProductItem";
 import { IProductItemProps } from "../components/ProductItem";
+import { prisma } from "@/lib/prisma";
 
 async function Store() {
-  const result = await fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"}/api/products`, {
-    cache: "no-store",
-  });
-
-  if (!result.ok) {
-    throw new Error("Failed to fetch products");
-  }
-
-  const data = (await result.json()) as IProductItemProps[];
+ const data = (await prisma.product.findMany({
+   orderBy: { createdAt: "desc" },
+ })) as IProductItemProps[];
 
   return (
     <main className="min-h-screen bg-slate-100 px-4 py-10 sm:px-6 lg:px-8">
