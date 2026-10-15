@@ -1,372 +1,180 @@
-# 🛍️ Shop Next
+# Sasy Shop 🛍️
 
-A modern **Full-Stack E-Commerce application** built with **Next.js** and **Express.js**.
+Sasy Shop is a full-stack online store built with Next.js, React, TypeScript, and PostgreSQL. I built this project to create a simple, modern shopping experience where users can explore products, manage their cart, and create an account.
 
-The project includes a complete shopping experience with product browsing, product details, shopping cart, discount codes, authentication, protected routes, and a dashboard.
+The project also includes a dashboard for adding products and a database powered by Prisma and Neon.
 
----
+🔗 **Live Demo:** [https://shop-next-sand.vercel.app/](https://shop-next-sand.vercel.app/)
 
-## ✨ Features
+## ✨ What Can You Do?
 
-### 🛒 Shopping
+- Browse products and view their prices, images, descriptions, and ratings.
+- Open a product page to see more details.
+- Create an account, log in, and log out.
+- Add products to your shopping cart.
+- Use available discount codes.
+- Access a protected dashboard to add new products.
+- Store product, user, and discount data in a PostgreSQL database.
+- Use the store on desktop and mobile devices.
 
-* Browse available products
-* Product cards with essential information
-* View detailed information for each product
-* Add products to the shopping cart
-* Increase or decrease product quantity
-* Remove products from the cart
-* Calculate the total purchase amount
-* Apply discount codes
-* Automatically calculate the discount
-* Display the final price after applying discounts
+## 🧰 Built With
 
-### 🔐 Authentication
+Here are the main technologies used in this project:
 
-* User login
-* Cookie-based authentication
-* HTTP-only session cookie
-* Protected dashboard route
-* Authentication status checking
-* Logout functionality
-* Automatic redirect for unauthenticated users
+- **Next.js** — Application framework and routing
+- **React** — Building the user interface
+- **TypeScript** — Writing more reliable code
+- **Tailwind CSS** — Styling the application
+- **Prisma** — Working with the database
+- **PostgreSQL** — Storing application data
+- **Neon** — Hosting the PostgreSQL database
+- **Axios** — Making HTTP requests
+- **bcryptjs** — Hashing passwords
+- **jose** — Creating and verifying session tokens
+- **Vercel** — Deploying the application
 
-### 📊 Dashboard
-
-* Protected dashboard page
-* Only authenticated users can access the dashboard
-* Authentication handled through the Express backend and Next.js proxy
-
----
-
-## 🛠️ Tech Stack
-
-### Frontend
-
-* **Next.js 16**
-* **React 19**
-* **TypeScript**
-* **Tailwind CSS**
-* **Axios**
-
-### Backend
-
-* **Node.js**
-* **Express.js**
-* **Cookie Parser**
-* **CORS**
-
----
-
-## 📸 Application Flow
-
-### 🏪 Shop
-
-Users can browse products from the main shop page.
+## 📂 Project Structure
 
 ```text
-Shop
- ↓
-Product Card
- ↓
-Product Details
- ↓
-Add to Cart
-```
-
-### 🛒 Shopping Cart
-
-Users can manage their cart and see the total price.
-
-```text
-Products
-   ↓
-Shopping Cart
-   ↓
-Quantity
-   ↓
-Subtotal
-   ↓
-Discount Code
-   ↓
-Discount
-   ↓
-Final Total
-```
-
----
-
-## 🎟️ Discount System
-
-The shopping cart supports discount codes.
-
-Users can enter a valid discount code and the application calculates the discount automatically.
-
-```text
-Original Total
-      ↓
-Discount Code
-      ↓
-Discount Amount
-      ↓
-Final Total
-```
-
----
-
-## 🔐 Authentication Flow
-
-The application uses cookie-based authentication.
-
-When a user logs in:
-
-```text
-Login Page
-    ↓
-POST /login
-    ↓
-Express Backend
-    ↓
-Validate Credentials
-    ↓
-Set HTTP-only Cookie
-    ↓
-Authenticated User
-```
-
-The dashboard is protected and requires authentication.
-
-```text
-/dashboard
-     ↓
-Authenticated?
-   ↙       ↘
- Yes        No
- ↓           ↓
-Dashboard   /login
-```
-
----
-
-## 🚪 Logout
-
-Authenticated users can log out of their account.
-
-```text
-Logout Button
-      ↓
-POST /logout
-      ↓
-Clear Session Cookie
-      ↓
-User Logged Out
-```
-
----
-
-## 📁 Project Structure
-
-```text
-Shop-next/
-│
+shop-next/
 ├── app/
-│   ├── login/
-│   │   └── page.tsx
-│   │
-│   ├── dashboard/
-│   │   └── page.tsx
-│   │
-│   ├── products/
-│   │   └── ...
-│   │
+│   ├── api/
+│   │   ├── auth/
+│   │   │   ├── login/
+│   │   │   ├── logout/
+│   │   │   ├── me/
+│   │   │   └── register/
+│   │   ├── discounts/
+│   │   └── products/
 │   ├── cart/
-│   │   └── ...
-│   │
-│   └── ...
-│
-├── backend/
-│   └── ...
-│
-├── public/
-│
-├── proxy.ts
+│   ├── components/
+│   ├── context/
+│   ├── dashboard/
+│   ├── login/
+│   ├── register/
+│   └── store/
+├── lib/
+│   ├── auth.ts
+│   └── prisma.ts
+├── prisma/
+│   ├── schema.prisma
+│   └── migrations/
+├── prisma7.config.ts
 ├── package.json
-├── tsconfig.json
 └── README.md
 ```
 
----
+## 🚀 Run It Locally
 
-## 🚀 Getting Started
+Want to run Sasy Shop on your own machine? Follow these steps.
 
-### 1. Clone the repository
+### Requirements
 
-```bash
-git clone https://github.com/sasanbrv/Shop-next.git
+- Node.js (LTS recommended)
+- npm
+- A PostgreSQL database
+- Git
 
-cd Shop-next
-```
-
-### 2. Install dependencies
-
-```bash
-npm install
-```
-
-### 3. Start the Next.js frontend
+### 1. Clone the Repository
 
 ```bash
-npm run dev
+git clone YOUR_GITHUB_REPOSITORY_URL
+cd shop-next
 ```
 
-The frontend will run on:
+Replace `YOUR_GITHUB_REPOSITORY_URL` with your repository URL.
 
-```text
-http://localhost:3000
-```
-
-### 4. Start the backend
-
-Open another terminal and go to the backend directory:
-
-```bash
-cd backend
-```
-
-Install dependencies:
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-Then start the Express server.
+### 3. Add Environment Variables
 
-The backend will run on:
+Create a `.env` file in the root directory:
 
-```text
-http://localhost:5000
+```env
+DATABASE_URL="YOUR_POSTGRESQL_CONNECTION_STRING"
+AUTH_SECRET="YOUR_RANDOM_SECRET_AT_LEAST_32_CHARACTERS_LONG"
 ```
 
----
+`DATABASE_URL` should point to your PostgreSQL database. You can use Neon to create a hosted database.
 
-## 🔑 Demo Login
+`AUTH_SECRET` is used to sign session tokens. Use a strong, randomly generated secret and keep it private.
 
-For local development, the project currently uses:
+**Never commit your `.env` file or database credentials to GitHub.**
 
-```text
-Username: admin
-Password: 1234
+### 4. Prepare the Database
+
+Generate the Prisma Client:
+
+```bash
+npx prisma generate
 ```
 
-> ⚠️ These credentials are for development purposes only and should not be used in production.
+If you're setting up a database that hasn't been migrated yet, apply the existing migrations:
 
----
-
-## 🛡️ Protected Routes
-
-The dashboard is protected using the Next.js proxy.
-
-If a user is not authenticated:
-
-```text
-/dashboard
-     ↓
-Not authenticated
-     ↓
-/login
+```bash
+npx prisma migrate deploy
 ```
 
-If the user is authenticated:
+Make sure your database connection is configured correctly before running migrations.
 
-```text
-/dashboard
-     ↓
-Dashboard
-```
-
----
-
-## 📜 Available Scripts
-
-### Development
+### 5. Start the Development Server
 
 ```bash
 npm run dev
 ```
 
-Starts the Next.js development server.
+Visit [http://localhost:3000](http://localhost:3000) to open the application.
 
-### Production Build
+## 📜 Available Commands
 
-```bash
-npm run build
-```
+| Command | What it does |
+|---|---|
+| `npm run dev` | Starts the development server |
+| `npm run build` | Generates Prisma Client and builds the app |
+| `npm start` | Starts the production server |
+| `npm run lint` | Runs ESLint |
 
-Creates a production build.
+## 🔒 Authentication and Security
 
-### Production Start
+Sasy Shop uses `bcryptjs` to hash passwords and `jose` to sign and verify session tokens. Session cookies are configured as HTTP-only, helping prevent client-side JavaScript from reading them.
 
-```bash
-npm run start
-```
+The dashboard also checks the user's session before allowing access. Keep all secrets and database credentials in environment variables.
 
-Starts the production server.
+## 🌐 Deployment
 
-### Lint
+The live version is hosted on Vercel, with Neon providing the PostgreSQL database.
 
-```bash
-npm run lint
-```
+To deploy your own version:
 
-Runs ESLint.
+1. Push the project to GitHub.
+2. Import the repository into Vercel.
+3. Add `DATABASE_URL` and `AUTH_SECRET` to the project's environment variables.
+4. Make sure the production database has the required migrations.
+5. Deploy the project.
 
----
+## 💡 Ideas for the Future
 
-## ⚠️ Development Note
+There are plenty of ways to build on this project, including:
 
-This project is currently a learning and development project.
+- Search, filtering, and sorting
+- A wishlist for favorite products
+- Order management and checkout
+- Editing and deleting products
+- Automated tests
+- Pagination for larger product catalogs
 
-The authentication system currently uses a simple session value and demo credentials.
+## 🤝 Feedback and Contributions
 
-For a production application, authentication should be improved with:
-
-* Secure session management
-* Password hashing
-* Database-backed users
-* Environment variables
-* HTTPS
-* Secure cookie configuration
-* Proper authorization
-* Server-side validation
-
----
-
-## 📌 Future Improvements
-
-* [ ] User registration
-* [ ] Database integration
-* [ ] Persistent shopping cart
-* [ ] Payment integration
-* [ ] Order management
-* [ ] Product management
-* [ ] Admin dashboard
-* [ ] Product search
-* [ ] Product filtering
-* [ ] Product categories
-* [ ] User profile
-* [ ] Order history
-* [ ] Real authentication and authorization
-
----
-
-## 👨‍💻 Author
-
-**Sasan**
-
-GitHub: [@sasanbrv](https://github.com/sasanbrv)
-
----
+Found a bug or have an idea for an improvement? Feel free to open an issue or submit a pull request.
 
 ## 📄 License
 
-This project is for learning and development purposes.
+No license has been added yet. If you plan to share or distribute this project, choose a suitable license and add it to the repository.
+
+---
+
+Made with ❤️ using Next.js, TypeScript, and PostgreSQL.
