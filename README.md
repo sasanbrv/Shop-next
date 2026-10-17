@@ -4,7 +4,8 @@ Sasy Shop is a full-stack online store built with Next.js, React, TypeScript, an
 
 The project also includes a dashboard for adding products and a database powered by Prisma and Neon.
 
-🔗 **Live Demo:** [https://shop-next-sand.vercel.app/](https://shop-next-sand.vercel.app/)
+🔗 **Live Demo:**
+## [https://shop-next-sand.vercel.app/](https://shop-next-sand.vercel.app/)
 
 ## ✨ What Can You Do?
 
